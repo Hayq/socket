@@ -39,13 +39,11 @@ private:
    static bool FindId(const char*);
    static void CreateId(const int);
    static void error(const char*);
-   static void writeThread(std::string, std::string);
-
    
 private:
    int sockfd;
    socklen_t clilen;
    sockaddr_in server_addr;
    sockaddr_in client_addr;
-   static std::map<std::string, std::string> cli_info;
+   static std::map<int, std::string> cli_info;
 };

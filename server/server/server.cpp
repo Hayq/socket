@@ -46,10 +46,10 @@ void Server::acceptCliThread(int sockfd, sockaddr_in client_addr, socklen_t clil
 
 bool Server::FindId(const char* info){
    bool isfind = false;
-   const std::string Id = std::to_string(CharToCliInfo<int>(info, "sock"));
+   int Id = (CharToCliInfo<int>(info, "sock"));
    
    for(auto& x: cli_info){
-      if(x.first.find(Id) != std::string::npos){
+      if(x.first == Id){
          std::cout << "Find cli: " << Id << std::endl;
          isfind = true;
          break;
@@ -63,22 +63,15 @@ void Server::CreateId(const int id){
    std::string size = readStr(id);
    int _size = atoi(size.c_str());
    
-   std::cout << _size;
-   
-   std::string _name = readStr(id);
-   std::string name;
+   std::string name = readStr(id);
+   std::string _name;
    
    for(int i = 0; i < _size; ++i)
-      name[i] = _name[i];
-   std::cout << name.size();
-   std::cout << _size <<"-" << _name << "-" << name << "-";;
-}
-
-
-//ERRORS
-void Server::error(const char *mess){
-   std::cout << mess << std::endl;
-   exit(1);
+      _name += name[i];
+   cli_info.insert(std::pair<int, std::string>((int)id, _name));
+   
+   for(auto& x: cli_info)
+      std::cout << "info: " << x.second << std::endl;
 }
 
 //Read and terun writed from cli
@@ -90,6 +83,7 @@ std::string Server::readStr(const int socket){
    ssize_t n = read(socket, buffer, sizeof(buffer));
    if(n < 0)
       error("readStr");
+   
    return buffer;
 }
 
@@ -133,15 +127,19 @@ void Server::SendMessage(std::string str){
       message += str[i];
    }
 
+   cli_info.
+   
    for(auto& x: cli_info){
-         std::cout << x.first << " _ " << name << std::endl;
-         std::cout << x.second;
+      if (x.second == name){
+         int n = write(x.first, message.c_str(), message.size());
+         if(n < 0)
+            error("write to");
       }
-      
-   writeThread(name, message);
+   }
 }
 
-void Server::writeThread(std::string sock, std::string message){
-   
-   
+//ERRORS
+void Server::error(const char *mess){
+   std::cout << mess << std::endl;
+   exit(1);
 }

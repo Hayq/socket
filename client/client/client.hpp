@@ -12,14 +12,13 @@
 class Client
 {
 public:
-   Client(const char*[]);
+   Client(const char*[], const int);
    void Connection();
    static void writeThread(int);
    static void readThread(int);
    
 private:
    int sockfd;
-   ssize_t n;
    struct sockaddr_in server_addr;
    struct hostent* server;
 

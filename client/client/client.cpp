@@ -1,7 +1,7 @@
 #include "client.hpp"
 #include <thread>
 
-Client::Client(const char* argv[]){   
+Client::Client(const char* argv[], const int argc){
    sockfd = socket(AF_INET, SOCK_STREAM, 0);
    
    if (sockfd < 0)
@@ -17,7 +17,13 @@ Client::Client(const char* argv[]){
    bcopy((char*) server->h_addr,
          (char*)&server_addr.sin_addr.s_addr,
          server->h_length);
-   int host_port = atoi(argv[1]);
+   
+   int host_port;
+
+   if(argc < 2)
+      host_port = 8888;
+   else
+      host_port = atoi(argv[1]);
    server_addr.sin_port = htons(host_port);
 }
 
@@ -40,7 +46,6 @@ void Client::writeThread(const int sockfd){
       fgets(buffer, 255, stdin);
       std::string str(buffer);
       ssize_t size = str.size() - 1;
-      std::cout << size;
       
       //send text size
       ssize_t n = write(sockfd, std::to_string(size).c_str(), 1);
