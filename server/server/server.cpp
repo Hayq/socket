@@ -126,8 +126,6 @@ void Server::SendMessage(std::string str){
    for(; i < str.size(); ++i ){
       message += str[i];
    }
-
-   cli_info.
    
    for(auto& x: cli_info){
       if (x.second == name){

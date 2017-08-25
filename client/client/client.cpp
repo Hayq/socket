@@ -2,12 +2,14 @@
 #include <thread>
 
 Client::Client(const char* argv[], const int argc){
+   int host_port;
    sockfd = socket(AF_INET, SOCK_STREAM, 0);
    
    if (sockfd < 0)
       error("ERROR: socket do not created");
    
-   server = gethostbyname("192.168.88.23");
+//   server = gethostbyname("192.168.88.23");
+   server = gethostbyname(argv[1]);
    
    if ( server == NULL )
       error("ERROR: no such host");
@@ -18,12 +20,11 @@ Client::Client(const char* argv[], const int argc){
          (char*)&server_addr.sin_addr.s_addr,
          server->h_length);
    
-   int host_port;
 
-   if(argc < 2)
+   if(argc < 3)
       host_port = 8888;
    else
-      host_port = atoi(argv[1]);
+      host_port = atoi(argv[2]);
    server_addr.sin_port = htons(host_port);
 }
 
